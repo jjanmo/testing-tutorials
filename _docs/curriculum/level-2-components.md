@@ -4,12 +4,12 @@
 
 ## 📋 과제 개요
 
-| 항목 | 내용 |
-|------|------|
-| 난이도 | ⭐⭐ 초급 |
-| 예상 소요 시간 | 8-10시간 |
-| 선수 지식 | Level 1 완료, React 기초 |
-| 학습 키워드 | `render`, `screen`, `userEvent`, `getByRole`, `findBy`, `waitFor` |
+| 항목           | 내용                                                              |
+| -------------- | ----------------------------------------------------------------- |
+| 난이도         | ⭐⭐ 초급                                                         |
+| 예상 소요 시간 | 8-10시간                                                          |
+| 선수 지식      | Level 1 완료, React 기초                                          |
+| 학습 키워드    | `render`, `screen`, `userEvent`, `getByRole`, `findBy`, `waitFor` |
 
 ---
 
@@ -59,11 +59,11 @@
 
 ```typescript
 interface CounterProps {
-  initialValue?: number
-  min?: number
-  max?: number
-  step?: number
-  onChange?: (value: number) => void
+  initialValue?: number;
+  min?: number;
+  max?: number;
+  step?: number;
+  onChange?: (value: number) => void;
 }
 ```
 
@@ -103,18 +103,18 @@ describe('Counter', () => {
     test('+1 버튼 클릭 시 값이 1 증가한다', async () => {
       const user = userEvent.setup()
       render(<Counter />)
-      
+
       await user.click(screen.getByRole('button', { name: '+1' }))
-      
+
       expect(screen.getByText('1')).toBeInTheDocument()
     })
 
     test('-1 버튼 클릭 시 값이 1 감소한다', async () => {
       const user = userEvent.setup()
       render(<Counter initialValue={5} />)
-      
+
       await user.click(screen.getByRole('button', { name: '-1' }))
-      
+
       expect(screen.getByText('4')).toBeInTheDocument()
     })
 
@@ -129,11 +129,11 @@ describe('Counter', () => {
     test('여러 번 클릭하면 누적된다', async () => {
       const user = userEvent.setup()
       render(<Counter />)
-      
+
       await user.click(screen.getByRole('button', { name: '+1' }))
       await user.click(screen.getByRole('button', { name: '+1' }))
       await user.click(screen.getByRole('button', { name: '+10' }))
-      
+
       expect(screen.getByText('12')).toBeInTheDocument()
     })
   })
@@ -142,10 +142,10 @@ describe('Counter', () => {
     test('초기화 버튼 클릭 시 initialValue로 돌아간다', async () => {
       const user = userEvent.setup()
       render(<Counter initialValue={5} />)
-      
+
       await user.click(screen.getByRole('button', { name: '+10' }))
       await user.click(screen.getByRole('button', { name: '초기화' }))
-      
+
       expect(screen.getByText('5')).toBeInTheDocument()
     })
   })
@@ -153,14 +153,14 @@ describe('Counter', () => {
   describe('min/max 제한', () => {
     test('max에 도달하면 증가 버튼이 비활성화된다', async () => {
       render(<Counter initialValue={10} max={10} />)
-      
+
       expect(screen.getByRole('button', { name: '+1' })).toBeDisabled()
       expect(screen.getByRole('button', { name: '+10' })).toBeDisabled()
     })
 
     test('min에 도달하면 감소 버튼이 비활성화된다', async () => {
       render(<Counter initialValue={0} min={0} />)
-      
+
       expect(screen.getByRole('button', { name: '-1' })).toBeDisabled()
       expect(screen.getByRole('button', { name: '-10' })).toBeDisabled()
     })
@@ -168,9 +168,9 @@ describe('Counter', () => {
     test('max를 초과하는 값으로 증가하지 않는다', async () => {
       const user = userEvent.setup()
       render(<Counter initialValue={5} max={10} />)
-      
+
       await user.click(screen.getByRole('button', { name: '+10' }))
-      
+
       expect(screen.getByText('10')).toBeInTheDocument() // max로 제한
     })
   })
@@ -180,9 +180,9 @@ describe('Counter', () => {
       const handleChange = vi.fn()
       const user = userEvent.setup()
       render(<Counter onChange={handleChange} />)
-      
+
       await user.click(screen.getByRole('button', { name: '+1' }))
-      
+
       expect(handleChange).toHaveBeenCalledWith(1)
     })
 
@@ -190,10 +190,10 @@ describe('Counter', () => {
       const handleChange = vi.fn()
       const user = userEvent.setup()
       render(<Counter initialValue={0} onChange={handleChange} />)
-      
+
       await user.click(screen.getByRole('button', { name: '+1' }))
       await user.click(screen.getByRole('button', { name: '초기화' }))
-      
+
       expect(handleChange).toHaveBeenLastCalledWith(0)
     })
   })
@@ -202,9 +202,9 @@ describe('Counter', () => {
     test('음수 값은 빨간색으로 표시된다', async () => {
       const user = userEvent.setup()
       render(<Counter initialValue={0} />)
-      
+
       await user.click(screen.getByRole('button', { name: '-1' }))
-      
+
       const display = screen.getByText('-1')
       expect(display).toHaveClass('text-red-500') // 또는 해당 클래스
     })
@@ -274,11 +274,11 @@ describe('Counter', () => {
 
 ```typescript
 interface ToggleProps {
-  checked?: boolean           // 제어 컴포넌트
-  defaultChecked?: boolean    // 비제어 컴포넌트
-  disabled?: boolean
-  label?: string
-  onChange?: (checked: boolean) => void
+  checked?: boolean; // 제어 컴포넌트
+  defaultChecked?: boolean; // 비제어 컴포넌트
+  disabled?: boolean;
+  label?: string;
+  onChange?: (checked: boolean) => void;
 }
 ```
 
@@ -302,21 +302,21 @@ describe('Toggle', () => {
     test('클릭하면 상태가 토글된다', async () => {
       const user = userEvent.setup()
       render(<Toggle />)
-      
+
       const toggle = screen.getByRole('switch')
       await user.click(toggle)
-      
+
       expect(toggle).toBeChecked()
     })
 
     test('다시 클릭하면 원래 상태로 돌아간다', async () => {
       const user = userEvent.setup()
       render(<Toggle />)
-      
+
       const toggle = screen.getByRole('switch')
       await user.click(toggle)
       await user.click(toggle)
-      
+
       expect(toggle).not.toBeChecked()
     })
   })
@@ -325,7 +325,7 @@ describe('Toggle', () => {
     test('checked prop으로 상태를 제어한다', () => {
       const { rerender } = render(<Toggle checked={false} />)
       expect(screen.getByRole('switch')).not.toBeChecked()
-      
+
       rerender(<Toggle checked={true} />)
       expect(screen.getByRole('switch')).toBeChecked()
     })
@@ -333,9 +333,9 @@ describe('Toggle', () => {
     test('클릭해도 onChange 없이는 상태가 바뀌지 않는다', async () => {
       const user = userEvent.setup()
       render(<Toggle checked={false} />)
-      
+
       await user.click(screen.getByRole('switch'))
-      
+
       expect(screen.getByRole('switch')).not.toBeChecked()
     })
   })
@@ -345,9 +345,9 @@ describe('Toggle', () => {
       const handleChange = vi.fn()
       const user = userEvent.setup()
       render(<Toggle onChange={handleChange} />)
-      
+
       await user.click(screen.getByRole('switch'))
-      
+
       expect(handleChange).toHaveBeenCalledWith(true)
     })
   })
@@ -357,9 +357,9 @@ describe('Toggle', () => {
       const handleChange = vi.fn()
       const user = userEvent.setup()
       render(<Toggle disabled onChange={handleChange} />)
-      
+
       await user.click(screen.getByRole('switch'))
-      
+
       expect(handleChange).not.toHaveBeenCalled()
     })
 
@@ -378,9 +378,9 @@ describe('Toggle', () => {
     test('레이블을 클릭해도 토글된다', async () => {
       const user = userEvent.setup()
       render(<Toggle label="알림 설정" />)
-      
+
       await user.click(screen.getByText('알림 설정'))
-      
+
       expect(screen.getByRole('switch')).toBeChecked()
     })
   })
@@ -389,22 +389,22 @@ describe('Toggle', () => {
     test('Space 키로 토글할 수 있다', async () => {
       const user = userEvent.setup()
       render(<Toggle />)
-      
+
       const toggle = screen.getByRole('switch')
       toggle.focus()
       await user.keyboard(' ')
-      
+
       expect(toggle).toBeChecked()
     })
 
     test('Enter 키로 토글할 수 있다', async () => {
       const user = userEvent.setup()
       render(<Toggle />)
-      
+
       const toggle = screen.getByRole('switch')
       toggle.focus()
       await user.keyboard('{Enter}')
-      
+
       expect(toggle).toBeChecked()
     })
   })
@@ -463,15 +463,15 @@ describe('Toggle', () => {
 
 ```typescript
 interface AccordionItem {
-  id: string
-  title: string
-  content: React.ReactNode
+  id: string;
+  title: string;
+  content: React.ReactNode;
 }
 
 interface AccordionProps {
-  items: AccordionItem[]
-  allowMultiple?: boolean
-  defaultOpenIds?: string[]
+  items: AccordionItem[];
+  allowMultiple?: boolean;
+  defaultOpenIds?: string[];
 }
 ```
 
@@ -490,7 +490,7 @@ describe('Accordion', () => {
   describe('초기 렌더링', () => {
     test('모든 항목의 제목이 표시된다', () => {
       render(<Accordion items={mockItems} />)
-      
+
       expect(screen.getByText('섹션 1')).toBeInTheDocument()
       expect(screen.getByText('섹션 2')).toBeInTheDocument()
       expect(screen.getByText('섹션 3')).toBeInTheDocument()
@@ -498,14 +498,14 @@ describe('Accordion', () => {
 
     test('기본적으로 모든 내용이 숨겨져 있다', () => {
       render(<Accordion items={mockItems} />)
-      
+
       expect(screen.queryByText('섹션 1의 내용입니다.')).not.toBeInTheDocument()
       expect(screen.queryByText('섹션 2의 내용입니다.')).not.toBeInTheDocument()
     })
 
     test('defaultOpenIds로 초기에 열린 항목을 지정할 수 있다', () => {
       render(<Accordion items={mockItems} defaultOpenIds={['2']} />)
-      
+
       expect(screen.queryByText('섹션 1의 내용입니다.')).not.toBeInTheDocument()
       expect(screen.getByText('섹션 2의 내용입니다.')).toBeInTheDocument()
     })
@@ -515,28 +515,28 @@ describe('Accordion', () => {
     test('제목 클릭 시 내용이 표시된다', async () => {
       const user = userEvent.setup()
       render(<Accordion items={mockItems} />)
-      
+
       await user.click(screen.getByText('섹션 1'))
-      
+
       expect(screen.getByText('섹션 1의 내용입니다.')).toBeInTheDocument()
     })
 
     test('열린 항목의 제목을 클릭하면 닫힌다', async () => {
       const user = userEvent.setup()
       render(<Accordion items={mockItems} defaultOpenIds={['1']} />)
-      
+
       await user.click(screen.getByText('섹션 1'))
-      
+
       expect(screen.queryByText('섹션 1의 내용입니다.')).not.toBeInTheDocument()
     })
 
     test('allowMultiple=false면 하나만 열 수 있다', async () => {
       const user = userEvent.setup()
       render(<Accordion items={mockItems} allowMultiple={false} />)
-      
+
       await user.click(screen.getByText('섹션 1'))
       await user.click(screen.getByText('섹션 2'))
-      
+
       expect(screen.queryByText('섹션 1의 내용입니다.')).not.toBeInTheDocument()
       expect(screen.getByText('섹션 2의 내용입니다.')).toBeInTheDocument()
     })
@@ -544,10 +544,10 @@ describe('Accordion', () => {
     test('allowMultiple=true면 여러 개를 동시에 열 수 있다', async () => {
       const user = userEvent.setup()
       render(<Accordion items={mockItems} allowMultiple={true} />)
-      
+
       await user.click(screen.getByText('섹션 1'))
       await user.click(screen.getByText('섹션 2'))
-      
+
       expect(screen.getByText('섹션 1의 내용입니다.')).toBeInTheDocument()
       expect(screen.getByText('섹션 2의 내용입니다.')).toBeInTheDocument()
     })
@@ -556,7 +556,7 @@ describe('Accordion', () => {
   describe('접근성', () => {
     test('각 제목 버튼에 aria-expanded 속성이 있다', () => {
       render(<Accordion items={mockItems} />)
-      
+
       const buttons = screen.getAllByRole('button')
       buttons.forEach(button => {
         expect(button).toHaveAttribute('aria-expanded')
@@ -566,24 +566,24 @@ describe('Accordion', () => {
     test('열린 항목의 aria-expanded는 true다', async () => {
       const user = userEvent.setup()
       render(<Accordion items={mockItems} />)
-      
+
       const button = screen.getByRole('button', { name: '섹션 1' })
       expect(button).toHaveAttribute('aria-expanded', 'false')
-      
+
       await user.click(button)
-      
+
       expect(button).toHaveAttribute('aria-expanded', 'true')
     })
 
     test('키보드로 탐색할 수 있다', async () => {
       const user = userEvent.setup()
       render(<Accordion items={mockItems} />)
-      
+
       const firstButton = screen.getByRole('button', { name: '섹션 1' })
       firstButton.focus()
-      
+
       await user.keyboard('{Enter}')
-      
+
       expect(screen.getByText('섹션 1의 내용입니다.')).toBeInTheDocument()
     })
   })
@@ -592,9 +592,9 @@ describe('Accordion', () => {
     test('ReactNode를 content로 렌더링할 수 있다', async () => {
       const user = userEvent.setup()
       render(<Accordion items={mockItems} />)
-      
+
       await user.click(screen.getByText('섹션 3'))
-      
+
       expect(screen.getByTestId('custom-content')).toBeInTheDocument()
     })
   })
@@ -669,7 +669,7 @@ describe('Tabs', () => {
   describe('초기 렌더링', () => {
     test('모든 탭 레이블이 표시된다', () => {
       render(<Tabs tabs={mockTabs} />)
-      
+
       expect(screen.getByRole('tab', { name: '프로필' })).toBeInTheDocument()
       expect(screen.getByRole('tab', { name: '설정' })).toBeInTheDocument()
       expect(screen.getByRole('tab', { name: '알림' })).toBeInTheDocument()
@@ -677,14 +677,14 @@ describe('Tabs', () => {
 
     test('첫 번째 탭이 기본으로 선택된다', () => {
       render(<Tabs tabs={mockTabs} />)
-      
+
       expect(screen.getByRole('tab', { name: '프로필' })).toHaveAttribute('aria-selected', 'true')
       expect(screen.getByText('프로필 내용입니다.')).toBeInTheDocument()
     })
 
     test('defaultActiveId로 초기 선택 탭을 지정할 수 있다', () => {
       render(<Tabs tabs={mockTabs} defaultActiveId="tab2" />)
-      
+
       expect(screen.getByRole('tab', { name: '설정' })).toHaveAttribute('aria-selected', 'true')
       expect(screen.getByText('설정 내용입니다.')).toBeInTheDocument()
     })
@@ -694,9 +694,9 @@ describe('Tabs', () => {
     test('탭 클릭 시 해당 컨텐츠가 표시된다', async () => {
       const user = userEvent.setup()
       render(<Tabs tabs={mockTabs} />)
-      
+
       await user.click(screen.getByRole('tab', { name: '설정' }))
-      
+
       expect(screen.getByText('설정 내용입니다.')).toBeInTheDocument()
       expect(screen.queryByText('프로필 내용입니다.')).not.toBeInTheDocument()
     })
@@ -705,9 +705,9 @@ describe('Tabs', () => {
       const handleChange = vi.fn()
       const user = userEvent.setup()
       render(<Tabs tabs={mockTabs} onChange={handleChange} />)
-      
+
       await user.click(screen.getByRole('tab', { name: '설정' }))
-      
+
       expect(handleChange).toHaveBeenCalledWith('tab2')
     })
   })
@@ -716,16 +716,16 @@ describe('Tabs', () => {
     test('disabled 탭은 클릭해도 선택되지 않는다', async () => {
       const user = userEvent.setup()
       render(<Tabs tabs={mockTabs} />)
-      
+
       await user.click(screen.getByRole('tab', { name: '알림' }))
-      
+
       expect(screen.getByRole('tab', { name: '알림' })).toHaveAttribute('aria-selected', 'false')
       expect(screen.queryByText('알림 내용입니다.')).not.toBeInTheDocument()
     })
 
     test('disabled 탭에 aria-disabled 속성이 있다', () => {
       render(<Tabs tabs={mockTabs} />)
-      
+
       expect(screen.getByRole('tab', { name: '알림' })).toHaveAttribute('aria-disabled', 'true')
     })
   })
@@ -734,24 +734,24 @@ describe('Tabs', () => {
     test('좌우 화살표로 탭 간 이동할 수 있다', async () => {
       const user = userEvent.setup()
       render(<Tabs tabs={mockTabs} />)
-      
+
       const firstTab = screen.getByRole('tab', { name: '프로필' })
       firstTab.focus()
-      
+
       await user.keyboard('{ArrowRight}')
-      
+
       expect(screen.getByRole('tab', { name: '설정' })).toHaveFocus()
     })
 
     test('disabled 탭은 건너뛴다', async () => {
       const user = userEvent.setup()
       render(<Tabs tabs={mockTabs} />)
-      
+
       const secondTab = screen.getByRole('tab', { name: '설정' })
       secondTab.focus()
-      
+
       await user.keyboard('{ArrowRight}')
-      
+
       // 알림 탭(disabled)을 건너뛰고 첫 번째로 돌아감
       expect(screen.getByRole('tab', { name: '프로필' })).toHaveFocus()
     })
@@ -781,6 +781,7 @@ describe('Tabs', () => {
 ## ✅ 완료 체크리스트
 
 ### 과제 2-1: Counter
+
 - [ ] 초기 렌더링 테스트 (3개 케이스)
 - [ ] 증가/감소 동작 테스트 (5개 케이스)
 - [ ] min/max 제한 테스트 (4개 케이스)
@@ -788,6 +789,7 @@ describe('Tabs', () => {
 - [ ] 접근성 테스트 (2개 케이스)
 
 ### 과제 2-2: Toggle
+
 - [ ] 비제어 컴포넌트 테스트 (4개 케이스)
 - [ ] 제어 컴포넌트 테스트 (2개 케이스)
 - [ ] disabled 상태 테스트 (2개 케이스)
@@ -795,12 +797,14 @@ describe('Tabs', () => {
 - [ ] 키보드 접근성 테스트 (2개 케이스)
 
 ### 과제 2-3: Accordion
+
 - [ ] 초기 렌더링 테스트 (3개 케이스)
 - [ ] 열기/닫기 테스트 (4개 케이스)
 - [ ] allowMultiple 테스트 (2개 케이스)
 - [ ] 접근성 테스트 (3개 케이스)
 
 ### 과제 2-4: Tabs
+
 - [ ] 초기 렌더링 테스트 (3개 케이스)
 - [ ] 탭 전환 테스트 (2개 케이스)
 - [ ] disabled 탭 테스트 (2개 케이스)
@@ -815,40 +819,40 @@ describe('Tabs', () => {
 
 ```typescript
 // 1순위: 접근성 쿼리 (권장)
-screen.getByRole('button', { name: '제출' })
-screen.getByLabelText('이메일')
+screen.getByRole('button', { name: '제출' });
+screen.getByLabelText('이메일');
 
 // 2순위: 시맨틱 쿼리
-screen.getByText('안녕하세요')
-screen.getByAltText('프로필 이미지')
+screen.getByText('안녕하세요');
+screen.getByAltText('프로필 이미지');
 
 // 3순위: Test ID (최후의 수단)
-screen.getByTestId('custom-element')
+screen.getByTestId('custom-element');
 ```
 
 ### userEvent vs fireEvent
 
 ```typescript
 // ✅ userEvent 권장 - 실제 사용자 동작 시뮬레이션
-const user = userEvent.setup()
-await user.click(button)
-await user.type(input, 'hello')
+const user = userEvent.setup();
+await user.click(button);
+await user.type(input, 'hello');
 
 // ⚠️ fireEvent - 단순 이벤트 발생 (빠르지만 비현실적)
-fireEvent.click(button)
-fireEvent.change(input, { target: { value: 'hello' } })
+fireEvent.click(button);
+fireEvent.change(input, { target: { value: 'hello' } });
 ```
 
 ### 비동기 쿼리
 
 ```typescript
 // findBy* - 요소가 나타날 때까지 대기
-await screen.findByText('로딩 완료')
+await screen.findByText('로딩 완료');
 
 // waitFor - 조건이 충족될 때까지 대기
 await waitFor(() => {
-  expect(screen.getByText('완료')).toBeInTheDocument()
-})
+  expect(screen.getByText('완료')).toBeInTheDocument();
+});
 ```
 
 ---

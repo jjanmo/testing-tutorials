@@ -4,12 +4,12 @@
 
 ## 📋 과제 개요
 
-| 항목 | 내용 |
-|------|------|
-| 난이도 | ⭐⭐⭐⭐ 중상급 |
-| 예상 소요 시간 | 8-10시간 |
-| 선수 지식 | Level 4 완료 |
-| 학습 키워드 | 다중 컴포넌트, Context, 상태 관리, 라우팅, 사용자 플로우 |
+| 항목           | 내용                                                     |
+| -------------- | -------------------------------------------------------- |
+| 난이도         | ⭐⭐⭐⭐ 중상급                                          |
+| 예상 소요 시간 | 8-10시간                                                 |
+| 선수 지식      | Level 4 완료                                             |
+| 학습 키워드    | 다중 컴포넌트, Context, 상태 관리, 라우팅, 사용자 플로우 |
 
 ---
 
@@ -93,19 +93,19 @@ describe('검색 → 장바구니 플로우', () => {
   test('검색 후 상품을 장바구니에 추가하면 헤더 카운트가 업데이트된다', async () => {
     const user = userEvent.setup()
     renderWithProviders('/search')
-    
+
     // Step 1: 검색
     const searchInput = screen.getByPlaceholderText(/검색/i)
     await user.type(searchInput, '노트북{Enter}')
-    
+
     // Step 2: 검색 결과 확인 및 상품 클릭
     expect(await screen.findByText(/검색 결과/i)).toBeInTheDocument()
     await user.click(screen.getByText('노트북C'))
-    
+
     // Step 3: 상품 상세 페이지에서 장바구니 추가
     expect(await screen.findByText('₩1,200,000')).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: /장바구니에 담기/i }))
-    
+
     // Step 4: 헤더 장바구니 카운트 확인
     const header = screen.getByRole('banner')
     expect(within(header).getByText('1')).toBeInTheDocument()
@@ -114,15 +114,15 @@ describe('검색 → 장바구니 플로우', () => {
   test('장바구니 페이지에서 추가한 상품을 확인할 수 있다', async () => {
     const user = userEvent.setup()
     renderWithProviders('/search')
-    
+
     // 검색 및 장바구니 추가
     await user.type(screen.getByPlaceholderText(/검색/i), '노트북{Enter}')
     await user.click(await screen.findByText('노트북C'))
     await user.click(await screen.findByRole('button', { name: /장바구니에 담기/i }))
-    
+
     // 장바구니 페이지로 이동
     await user.click(screen.getByRole('link', { name: /장바구니/i }))
-    
+
     // 장바구니에서 상품 확인
     expect(await screen.findByText('노트북C')).toBeInTheDocument()
     expect(screen.getByText('₩1,200,000')).toBeInTheDocument()
@@ -131,22 +131,22 @@ describe('검색 → 장바구니 플로우', () => {
   test('같은 상품을 여러 번 추가하면 수량이 증가한다', async () => {
     const user = userEvent.setup()
     renderWithProviders('/search')
-    
+
     // 첫 번째 추가
     await user.type(screen.getByPlaceholderText(/검색/i), '노트북{Enter}')
     await user.click(await screen.findByText('노트북C'))
     await user.click(await screen.findByRole('button', { name: /장바구니에 담기/i }))
-    
+
     // 다시 검색 후 같은 상품 추가
     await user.click(screen.getByRole('link', { name: /검색/i }))
     await user.type(screen.getByPlaceholderText(/검색/i), '노트북{Enter}')
     await user.click(await screen.findByText('노트북C'))
     await user.click(await screen.findByRole('button', { name: /장바구니에 담기/i }))
-    
+
     // 헤더 카운트는 여전히 1 (상품 종류 수)
     // 하지만 수량은 2
     await user.click(screen.getByRole('link', { name: /장바구니/i }))
-    
+
     expect(await screen.findByText('2')).toBeInTheDocument() // 수량
   })
 })
@@ -246,10 +246,10 @@ describe('로그인 → 주문 플로우', () => {
   test('비로그인 상태에서 주문하기 클릭 시 로그인 페이지로 이동한다', async () => {
     const user = userEvent.setup()
     renderWithProviders('/cart')
-    
+
     await screen.findByText('노트북')
     await user.click(screen.getByRole('button', { name: /주문하기/i }))
-    
+
     // 로그인 페이지로 이동
     expect(await screen.findByText(/로그인이 필요합니다/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/이메일/i)).toBeInTheDocument()
@@ -274,19 +274,19 @@ describe('로그인 → 주문 플로우', () => {
         })
       })
     )
-    
+
     const user = userEvent.setup()
     renderWithProviders('/cart')
-    
+
     // 주문하기 → 로그인 페이지
     await screen.findByText('노트북')
     await user.click(screen.getByRole('button', { name: /주문하기/i }))
-    
+
     // 로그인
     await user.type(screen.getByLabelText(/이메일/i), 'hong@example.com')
     await user.type(screen.getByLabelText(/비밀번호/i), 'password123')
     await user.click(screen.getByRole('button', { name: /로그인/i }))
-    
+
     // 주문 페이지로 리다이렉트
     expect(await screen.findByText(/주문\/결제/i)).toBeInTheDocument()
     expect(screen.getByText('노트북')).toBeInTheDocument()
@@ -310,17 +310,17 @@ describe('로그인 → 주문 플로우', () => {
         })
       })
     )
-    
+
     const user = userEvent.setup()
     renderWithProviders('/cart')
-    
+
     await screen.findByText('노트북')
     await user.click(screen.getByRole('button', { name: /주문하기/i }))
-    
+
     await user.type(screen.getByLabelText(/이메일/i), 'hong@example.com')
     await user.type(screen.getByLabelText(/비밀번호/i), 'password123')
     await user.click(screen.getByRole('button', { name: /로그인/i }))
-    
+
     // 주문 페이지에서 사용자 정보 확인
     await waitFor(() => {
       expect(screen.getByDisplayValue('홍길동')).toBeInTheDocument()
@@ -375,21 +375,21 @@ describe('상품 목록 필터/정렬/페이지네이션 통합', () => {
   test('필터, 정렬, 페이지네이션이 함께 동작한다', async () => {
     const user = userEvent.setup()
     render(<ProductListPage />)
-    
+
     // 1. 카테고리 필터 적용
     await user.selectOptions(screen.getByLabelText(/카테고리/i), '전자제품')
-    
+
     // 2. 정렬 적용
     await user.selectOptions(screen.getByLabelText(/정렬/i), 'priceAsc')
-    
+
     // 3. 결과 확인 - 첫 번째 상품이 가장 저렴해야 함
     const products = await screen.findAllByTestId('product-card')
     const firstProductPrice = within(products[0]).getByText(/₩/)
     expect(firstProductPrice).toHaveTextContent('₩50,000')
-    
+
     // 4. 2페이지로 이동
     await user.click(screen.getByRole('button', { name: '2' }))
-    
+
     // 5. 필터와 정렬이 유지되는지 확인
     expect(screen.getByLabelText(/카테고리/i)).toHaveValue('전자제품')
     expect(screen.getByLabelText(/정렬/i)).toHaveValue('priceAsc')
@@ -398,14 +398,14 @@ describe('상품 목록 필터/정렬/페이지네이션 통합', () => {
   test('필터 변경 시 페이지가 1로 리셋된다', async () => {
     const user = userEvent.setup()
     render(<ProductListPage />)
-    
+
     // 2페이지로 이동
     await user.click(await screen.findByRole('button', { name: '2' }))
     expect(screen.getByRole('button', { name: '2' })).toHaveAttribute('aria-current', 'page')
-    
+
     // 필터 변경
     await user.selectOptions(screen.getByLabelText(/카테고리/i), '전자제품')
-    
+
     // 1페이지로 리셋됨
     await waitFor(() => {
       expect(screen.getByRole('button', { name: '1' })).toHaveAttribute('aria-current', 'page')
@@ -419,11 +419,11 @@ describe('상품 목록 필터/정렬/페이지네이션 통합', () => {
         <ProductListPage />
       </MemoryRouter>
     )
-    
+
     await user.selectOptions(screen.getByLabelText(/카테고리/i), '전자제품')
     await user.selectOptions(screen.getByLabelText(/정렬/i), 'priceAsc')
     await user.click(screen.getByRole('button', { name: '2' }))
-    
+
     // URL에 쿼리 파라미터가 반영됨
     // ?category=전자제품&sort=priceAsc&page=2
   })
@@ -431,15 +431,15 @@ describe('상품 목록 필터/정렬/페이지네이션 통합', () => {
   test('필터 초기화 시 모든 필터와 페이지가 리셋된다', async () => {
     const user = userEvent.setup()
     render(<ProductListPage />)
-    
+
     // 필터 적용
     await user.selectOptions(screen.getByLabelText(/카테고리/i), '전자제품')
     await user.click(screen.getByRole('checkbox', { name: /품절 제외/i }))
     await user.click(screen.getByRole('button', { name: '2' }))
-    
+
     // 초기화
     await user.click(screen.getByRole('button', { name: /필터 초기화/i }))
-    
+
     // 모든 것이 기본값으로
     expect(screen.getByLabelText(/카테고리/i)).toHaveValue('')
     expect(screen.getByRole('checkbox', { name: /품절 제외/i })).not.toBeChecked()
@@ -453,17 +453,20 @@ describe('상품 목록 필터/정렬/페이지네이션 통합', () => {
 ## ✅ 완료 체크리스트
 
 ### 과제 5-1: 검색 → 장바구니 플로우
+
 - [ ] 검색 후 장바구니 추가 테스트
 - [ ] 헤더 카운트 업데이트 테스트
 - [ ] 장바구니 페이지 확인 테스트
 - [ ] 중복 추가 시 수량 증가 테스트
 
 ### 과제 5-2: 로그인 → 주문 플로우
+
 - [ ] 비로그인 시 리다이렉트 테스트
 - [ ] 로그인 후 주문 페이지 이동 테스트
 - [ ] 사용자 정보 자동 입력 테스트
 
 ### 과제 5-3: 필터/정렬/페이지네이션
+
 - [ ] 통합 동작 테스트
 - [ ] 필터 변경 시 페이지 리셋 테스트
 - [ ] 필터 초기화 테스트
@@ -491,11 +494,11 @@ function renderWithProviders(ui: React.ReactElement, options = {}) {
 ### within을 사용한 범위 한정
 
 ```typescript
-const header = screen.getByRole('banner')
-expect(within(header).getByText('1')).toBeInTheDocument()
+const header = screen.getByRole('banner');
+expect(within(header).getByText('1')).toBeInTheDocument();
 
-const productCard = screen.getByTestId('product-1')
-expect(within(productCard).getByText('₩50,000')).toBeInTheDocument()
+const productCard = screen.getByTestId('product-1');
+expect(within(productCard).getByText('₩50,000')).toBeInTheDocument();
 ```
 
 ---
